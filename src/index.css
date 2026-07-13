@@ -252,6 +252,29 @@ body {
   color: var(--gold);
 }
 
+/* --- シルエット・イラストの額装（カメオ風） --- */
+.popup-plate {
+  width: 130px;
+  height: 130px;
+  margin: 12px auto 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 38%, #fbf7ec 0%, #efe6d0 78%, #e6d9bd 100%);
+  border: 2px solid var(--gold-soft);
+  outline: 1px solid var(--line);
+  outline-offset: 4px;
+  box-shadow: inset 0 2px 8px rgba(120, 90, 40, 0.18);
+}
+
+.popup-plate-svg {
+  width: 84px;
+  height: 84px;
+  color: #4a3a24;
+}
+
 .popup-title {
   font-size: 34px;
   font-weight: 700;

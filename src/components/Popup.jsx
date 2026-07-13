@@ -1,9 +1,11 @@
 import React from 'react';
+import { getIllustration } from '../data/illustrations.js';
 
 export default function Popup({ node, onClose }) {
   if (!node) return null;
   const info = node.info || {};
   const isAnimal = node.kind === 'animal';
+  const illustration = getIllustration(node.id);
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -18,6 +20,19 @@ export default function Popup({ node, onClose }) {
         </button>
 
         <p className="popup-kind">{isAnimal ? '― 図鑑 ―' : '― 分類群 ―'}</p>
+
+        {illustration && (
+          <div className="popup-plate">
+            <svg
+              className="popup-plate-svg"
+              viewBox="0 0 120 120"
+              role="img"
+              aria-label={`${node.name}のイラスト`}
+              dangerouslySetInnerHTML={{ __html: illustration }}
+            />
+          </div>
+        )}
+
         <h2 className="popup-title">{node.name}</h2>
         <p className="popup-latin">{node.latin}</p>
 
