@@ -594,11 +594,29 @@ function countLeaves(node) {
   return node.children.reduce((acc, c) => acc + countLeaves(c), 0);
 }
 
+// ノードIDから決定的な擬似乱数[0,1)を得る（毎回同じ配置になるようにする）
+function hash01(str, salt) {
+  let h = (2166136261 ^ salt) >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 100000) / 100000;
+}
+
 function assignPositions(node, depth, nodes, links, parent) {
-  const radius = depth * RADIUS_STEP;
-  const y = depth * LEVEL_HEIGHT;
-  const x = Math.cos(node._angle) * radius;
-  const z = Math.sin(node._angle) * radius;
+  // 深さ0（共通祖先）は原点に固定。それ以外は少し揺らぎを加えて自然な散らばりにする
+  const j = depth === 0 ? 0 : 1;
+  const rRadius = hash01(node.id, 11);
+  const rAngle = hash01(node.id, 23);
+  const rHeight = hash01(node.id, 37);
+
+  const angle = node._angle + (rAngle - 0.5) * 0.38 * j;
+  const radius = depth * RADIUS_STEP * (0.82 + rRadius * 0.4 * j);
+  const y = depth * LEVEL_HEIGHT + (rHeight - 0.5) * LEVEL_HEIGHT * 0.7 * j;
+
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
   node.position = [x, y, z];
   nodes.push(node);
   if (parent) {
